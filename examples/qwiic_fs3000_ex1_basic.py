@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
-# qwiic_template_ex1_title.py TODO: replace template and title
+# qwiic_fs3000_ex1_basic.py
 #
-# TODO: Add description for this example
+#   Read values of air velocity from the FS3000 sensor, print them to terminal.
+#   Prints raw data, m/s and mph.
+#   Note, the response time on the sensor is 125ms.
+#
 #-------------------------------------------------------------------------------
-# Written by SparkFun Electronics, TODO: month and year
+# Written by SparkFun Electronics, November 2024
 #
 # This python library supports the SparkFun Electroncis Qwiic ecosystem
 #
@@ -33,30 +36,45 @@
 # SOFTWARE.
 #===============================================================================
 
-import qwiic_template # TODO Import correct package
+import qwiic_fs3000
 import sys
+import time
 
 def runExample():
-	# TODO Replace template and title
-	print("\nQwiic Template Example 1 - Title\n")
+	print("\nQwiic Template Example 1 - Basic\n")
 
 	# Create instance of device
-	myDevice = qwiic_template.QwiicTemplate() # TODO update as needed
+	myFS3000 = qwiic_fs3000.QwiicFS3000() 
 
 	# Check if it's connected
-	if myDevice.is_connected() == False:
+	if myFS3000.is_connected() == False:
 		print("The device isn't connected to the system. Please check your connection", \
 			file=sys.stderr)
 		return
 
 	# Initialize the device
-	myDevice.begin()
+	myFS3000.begin()
 
-	# TODO Add basic example code
+	# Set the range to match which version of the sensor you are using.
+	# FS3000-1005 (0-7.23 m/sec) --->>>  kAirflowRange7Mps
+	# FS3000-1015 (0-15 m/sec)   --->>>  kAirflowRange15Mps
+	myFS3000.set_range(myFS3000.kAirflowRange7Mps)
+		
+	while True:
+		print("FS3000 Readings \tRaw: ", end="")
+		print(myFS3000.read_raw(), end="")  # note, this returns an int from 0-3686
+		
+		print("\tm/s: ", end="")
+		print(myFS3000.read_meters_per_second(), end="")  # note, this returns a float from 0-7.23 for the FS3000-1005, and 0-15 for the FS3000-1015 
+		
+		print("\tmph: ", end="")
+		print(myFS3000.read_miles_per_hour())  # note, this returns a float from 0-16.17 for the FS3000-1005, and 0-33.55 for the FS3000-1015 
+		
+		time.sleep(1)  # note, response time on the sensor is 125ms
 
 if __name__ == '__main__':
 	try:
 		runExample()
 	except (KeyboardInterrupt, SystemExit) as exErr:
-		print("\nEnding Example")
+		print("\nEnding Example 1")
 		sys.exit(0)
