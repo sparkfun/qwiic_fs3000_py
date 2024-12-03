@@ -169,13 +169,13 @@ class QwiicFS3000(object):
         :rtype: bool
         """
         sum = 0
-        for i in range (1,4):
+        for i in range (1,5):
             sum += data_in[i]
         
         sum = sum % 256
-        # calculated_checksum = (~sum + 1) & 0xFF # TODO: Present but unused in the arduino lib...
         crc_byte = data_in[0]
         overall = sum+crc_byte
+        overall = overall % 256
 
         return overall == 0
     
@@ -188,7 +188,7 @@ class QwiicFS3000(object):
         """
 
         buff = self._i2c.read_block(self.address, None, 5) # Pass None for the command, this is a read not from a specific register. Will only work with newer versions of Qwiic_I2c_Py
-       
+
         if not self.checksum(buff):
             return -1
         
@@ -248,7 +248,7 @@ class QwiicFS3000(object):
         # using the data_position, we can find the "edges" of the data window we are in
         # and find the window size
 
-        window_size = self._raw_data_point[data_position + 1] - self._raw_data_point[data_position-1]
+        window_size = self._raw_data_point[data_position + 1] - self._raw_data_point[data_position]
 
         # diff is the amount (difference) above the bottom of the window
         diff = airflow_raw - self._raw_data_point[data_position]
