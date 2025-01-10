@@ -32,7 +32,7 @@
 # SOFTWARE.
 #===============================================================================
 
-"""
+"""!
 qwiic_fs3000
 ============
 Python module for the [SparkFun Qwiic FS300](https://www.sparkfun.com/products/18768A)
@@ -68,15 +68,13 @@ class QwiicFS3000(object):
     kAirflowRange15Mps = 1 # FS3000-1015 has a range of 0-15 meters per second
 
     def __init__(self, address=None, i2c_driver=None):
-        """
+        """!
         Constructor
 
-        :param address: The I2C address to use for the device
+        @param int, optional address: The I2C address to use for the device
             If not provided, the default address is used
-        :type address: int, optional
-        :param i2c_driver: An existing i2c driver object
+        @param I2CDriver, optional i2c_driver: An existing i2c driver object
             If not provided, a driver object is created
-        :type i2c_driver: I2CDriver, optional
         """
 
         # Use address if provided, otherwise pick the default
@@ -99,11 +97,10 @@ class QwiicFS3000(object):
         self._raw_data_point = [409, 915, 1522, 2066, 2523, 2908, 3256, 3572, 3686] # defaults to FS3000-1005 datapoints
 
     def is_connected(self):
-        """
+        """!
         Determines if this device is connected
 
-        :return: `True` if connected, otherwise `False`
-        :rtype: bool
+        @return **bool** `True` if connected, otherwise `False`
         """
         # Check if connected by seeing if an ACK is received
         return self._i2c.isDeviceConnected(self.address)
@@ -111,17 +108,16 @@ class QwiicFS3000(object):
     connected = property(is_connected)
 
     def begin(self):
-        """
+        """!
         Initializes this device with default parameters
 
-        :return: Returns `True` if successful, otherwise `False`
-        :rtype: bool
+        @return **bool** Returns `True` if successful, otherwise `False`
         """
         # Confirm device is connected before doing anything
         return self.is_connected()
 
     def set_range(self, range):
-        """
+        """!
         There are two varieties of this sensor (1) FS3000-1005 (0-7.23 m/sec)
         and (2) FS3000-1015 (0-15 m/sec)
 
@@ -132,11 +128,9 @@ class QwiicFS3000(object):
         Note, this also sets the datapoints (from the graphs in the datasheet pages 6 and 7).
         These datapoints are used to convert from raw values to m/sec - and then mph.
 
-        :param range: The range of the sensor
-        :type range: int
+        @param int range: The range of the sensor
 
-        :return: Returns `True` if successful, otherwise `False`
-        :rtype: bool
+        @return **bool** Returns `True` if successful, otherwise `False`
         """
 
         if range == self.kAirflowRange7Mps:
@@ -151,7 +145,7 @@ class QwiicFS3000(object):
         return True
         
     def checksum(self, data_in):
-        """
+        """!
         CHECKSUM
         Check to see that the CheckSum is correct, and data is good
         Return true if all is good, return false if something is off   
@@ -162,11 +156,9 @@ class QwiicFS3000(object):
         [3]generic checksum data
         [4]generic checksum data
 
-        :param data_in: The data to check
-        :type data_in: list
+        @param list data_in: The data to check
 
-        :return: Returns `True` if successful, otherwise `False`
-        :rtype: bool
+        @return **bool** Returns `True` if successful, otherwise `False`
         """
         sum = 0
         for i in range (1,5):
@@ -180,11 +172,10 @@ class QwiicFS3000(object):
         return overall == 0
     
     def read_raw(self):
-        """
+        """!
         Read from sensor, checksum, return raw data (409-3686)
 
-        :return: The raw value from the sensor (or -1 on error)
-        :rtype: int
+        @return **int** The raw value from the sensor (or -1 on error)
         """
 
         buff = self._i2c.read_block(self.address, None, 5) # Pass None for the command, this is a read not from a specific register. Will only work with newer versions of Qwiic_I2c_Py
@@ -207,11 +198,10 @@ class QwiicFS3000(object):
         return airflow_raw
     
     def read_meters_per_second(self):
-        """
-        Read from sensor, checksum, return m/s (0-7.23) 
+        """!
+        Read from sensor, checksum, return m/s (0-7.23)
 
-        :return: The air velocity value in meters per second (or -1 on error)
-        :rtype: float
+        @return **float** The air velocity value in meters per second (or -1 on error)
         """
 
         airflow_raw = self.read_raw()
@@ -264,11 +254,10 @@ class QwiicFS3000(object):
         return airflowMps
     
     def read_miles_per_hour(self):
-        """
+        """!
         Read from sensor, checksum, return mph (0-33ish)
 
-        :return: The air velocity value in miles per hour (or -1 on error)
-        :rtype: float
+        @return **float** The air velocity value in miles per hour (or -1 on error)
         """
 
         airflowMps = self.read_meters_per_second()
