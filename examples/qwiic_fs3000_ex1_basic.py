@@ -61,15 +61,18 @@ def runExample():
 	myFS3000.set_range(myFS3000.kAirflowRange7Mps)
 		
 	while True:
-		print("FS3000 Readings \tRaw: ", end="")
-		print(myFS3000.read_raw(), end="")  # note, this returns an int from 0-3686
+		# Read the sensor
+		raw = myFS3000.read_raw()
+		m_s = myFS3000.read_meters_per_second()
+		mph = myFS3000.read_miles_per_hour()
 		
-		print("\tm/s: ", end="")
-		print(myFS3000.read_meters_per_second(), end="")  # note, this returns a float from 0-7.23 for the FS3000-1005, and 0-15 for the FS3000-1015 
+		if raw == -1 or m_s == -1 or mph == -1:
+			continue # -1 indicates an error
 		
-		print("\tmph: ", end="")
-		print(myFS3000.read_miles_per_hour())  # note, this returns a float from 0-16.17 for the FS3000-1005, and 0-33.55 for the FS3000-1015 
-		
+		print("FS3000 Readings \tRaw: ", raw, end="")
+		print("\tm/s: ", m_s, end="")
+		print("\tmph:", mph)
+
 		time.sleep(1)  # note, response time on the sensor is 125ms
 
 if __name__ == '__main__':
