@@ -1,4 +1,4 @@
-Qwiic <Example Package Title>
+Qwiic FS3000 Python Package
 =============================================
 
-This is a short description of this package.
+This is the Python package for the SparkFun Qwiic FS3000.
