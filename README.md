@@ -31,7 +31,8 @@ New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.s
 
 This Python package supports the following SparkFun qwiic products on Python, MicroPython and Circuit python. 
 
-* [SparkFun Air Velocity Sensing Sensor - FS3000](https://www.sparkfun.com/products/18768A)
+* [SparkFun Air Velocity Sensor Breakout - FS3000-1005](https://www.sparkfun.com/sparkfun-air-velocity-sensor-breakout-fs3000-1005-qwiic.html)
+* [SparkFun Air Velocity Sensor Breakout - FS3000-1015](https://www.sparkfun.com/sparkfun-air-velocity-sensor-breakout-fs3000-1015-qwiic.html)
 
 ### Supported Platforms
 
